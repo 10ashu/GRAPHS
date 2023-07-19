@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cout<<"Enter the nodes"<<endl;
+    cin>>n;
+    vector<vector<int>> adj(n,vector<int> (n,0));
+    cout<<"Enter the number of edges"<<endl;
+    int e;
+    cin>>e;
+    cout<<"Enter the edge list"<<endl;
+    int u,v;
+    for(int i=0;i<e;i++)
+    {
+       cin>>u>>v;
+       adj[u][v]=1;
+    }
+    for(int i=0;i<adj.size();i++)
+    {
+        for(int j=0;j<adj[0].size();j++)
+        {
+            cout<<adj[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+    return 0;
+}
