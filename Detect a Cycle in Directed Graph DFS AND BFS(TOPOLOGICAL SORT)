@@ -1,0 +1,81 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+class Solution {
+  public:
+    // Function to detect cycle in a directed graph.
+    bool checkcyclicusingdfs(int src,vector<bool> &visited,vector<bool> &dfsvisited, vector<int> adj[])
+    {
+        visited[src]=true;
+        dfsvisited[src]=true;
+        for(auto nbr:adj[src] )
+        {
+            if(!visited[nbr])
+            {
+                bool ans=checkcyclicusingdfs(nbr,visited,dfsvisited,adj);
+                if(ans==true)
+                return true;
+            }
+           else if(dfsvisited[nbr])
+            {
+                return true;
+            }
+        }
+        dfsvisited[src]=false;
+        return false;
+    }
+    void bfs(int V,vector<int> adj[],vector<int>& toposort)
+    {
+        unordered_map<int,int> indegree;
+        for(int i=0;i<V;i++)
+        {
+            for(auto nbr: adj[i])
+            {
+                indegree[nbr]++;
+            }
+        }
+        queue<int> q;
+        for(int i=0;i<V;i++)
+        {
+            if(indegree[i]==0)
+            q.push(i);
+        }
+        while(!q.empty())
+        {
+            int front=q.front();
+            q.pop();
+            toposort.push_back(front);
+            for(auto nbr:adj[front])
+            {
+                indegree[nbr]--;
+                if(indegree[nbr]==0)
+                q.push(nbr);
+            }
+        }
+    }
+    bool isCyclic(int V, vector<int> adj[]) {
+        // unordered_map<int,bool> visited;
+        // unordered_map<int,bool> dfsvisited;
+    //     vector<bool> visited(V,false);
+    //     vector<bool> dfsvisited(V,false);
+    
+    //   bool ans=false;
+    //     for(int i=0;i<V;i++)
+    //     {
+    //         if(!visited[i])
+    //          ans=checkcyclicusingdfs(i,visited,dfsvisited,adj);
+    //         if(ans==true)
+    //         return 1;
+    //     }
+    //   return 0;
+      vector<int> toposort;
+      bfs(V,adj,toposort);
+      if(toposort.size()==V)
+      return false;
+      else
+      return true;
+    }
+};
+
