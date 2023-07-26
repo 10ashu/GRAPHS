@@ -1,0 +1,80 @@
+// LEETCODE DFS
+class Solution {
+public:
+    void dfs(int src,unordered_map<int,bool> &visited,unordered_map<int,list<int>> &adjlist)
+    {
+        visited[src]=true;
+        for(auto nbr:adjlist[src])
+        {
+            if(!visited[nbr])
+            dfs(nbr,visited,adjlist);
+        }
+    }
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        unordered_map<int,list<int>> adjlist;
+        for(int i=0;i<isConnected.size();i++)
+        {
+            for(int j=0;j<isConnected.size();j++)
+            {
+                if(isConnected[i][j]==1)
+                adjlist[i].push_back(j);
+            }
+        }
+        int cnt=0;
+        unordered_map<int,bool> visited;
+        for(int i=0;i<isConnected.size();i++)
+        {
+            if(!visited[i])
+            {
+                dfs(i,visited,adjlist);
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+};
+// GFG   BFS
+class Solution {
+  public:
+    void bfs(int src,unordered_map<int,bool> &visited,unordered_map<int,list<int>> &adjlist)
+    {
+        visited[src]=true;
+        queue<int> q;
+        q.push(src);
+        while(!q.empty())
+        {
+            int front=q.front();
+            q.pop();
+            for(auto nbr:adjlist[front])
+            {
+                if(!visited[nbr])
+                {
+                    visited[nbr]=true;
+                    q.push(nbr);
+                }
+            }
+        }
+    }
+    int numProvinces(vector<vector<int>> adj, int V) {
+        unordered_map<int,list<int>> adjlist;
+        for(int i=0;i<V;i++)
+        {
+            for(int j=0;j<V;j++)
+            {
+                if(adj[i][j]==1)
+                adjlist[i].push_back(j);
+            }
+        }
+        unordered_map<int,bool> visited;
+        int cnt=0;
+        for(int i=0;i<V;i++)
+        {
+            if(!visited[i])
+            {
+                bfs(i,visited,adjlist);
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+};
