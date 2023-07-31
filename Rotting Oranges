@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        queue<pair<pair<int,int>,int>> q;
+        vector<vector<int>> copy=grid;
+        int anstime=0;
+        for(int i=0;i<grid.size();i++)
+        {
+          for(int j=0;j<grid[i].size();j++)
+          {
+              if(grid[i][j]==2)
+              {
+                  pair<int,int> cor=make_pair(i,j);
+            
+                  q.push({cor,0});
+              }
+          }
+        }
+        int n=grid.size();
+        int m=grid[0].size();
+        while(!q.empty())
+        {
+            pair<pair<int,int>,int> fnode=q.front();
+            int row=fnode.first.first;
+            int col=fnode.first.second;
+            int time=fnode.second;
+            q.pop();
+            int dx[]={0,-1,0,+1};
+            int dy[]={-1,0,+1,0};
+            for(int i=0;i<4;i++)
+            {
+                int nrow=row+dx[i];
+                int ncol=col+dy[i];
+                if(nrow>=0&&nrow<n&&ncol>=0&&ncol<m&&copy[nrow][ncol]==1)
+                {
+                    
+                    anstime=time+1;
+                    pair<int,int> coordinates={nrow,ncol};
+                    q.push({coordinates,time+1});
+                     copy[nrow][ncol]=2;
+                }
+            }
+        }
+        for(int i=0;i<copy.size();i++)
+        {
+            for(int j=0;j<copy[i].size();j++)
+            {
+                if(copy[i][j]==1)
+                return -1;
+            }
+        }
+        return anstime;
+    }
+};
