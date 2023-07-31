@@ -1,0 +1,63 @@
+class Solution {
+public:
+ vector<int> topo(unordered_map<int,list<int>> &adjlist,int n)
+   {
+         vector<int> indegree(n,0);
+          unordered_map<int,bool> visited;
+         for(auto node: adjlist)
+         {
+             for(auto nbr:node.second)
+             {
+                 indegree[nbr]++;
+             }
+         }
+         queue<int> q;
+         for(int i=0;i<n;i++)
+         {
+             if(indegree[i]==0){
+                 visited[i]=true;
+                 q.push(i);
+             }
+             
+         }
+        
+       vector<int> ans;        
+         while(!q.empty())
+         {
+             int front=q.front();
+             q.pop();
+             ans.push_back(front);
+             for(auto nbr:adjlist[front])
+             {
+                 if(!visited[nbr])
+                 {
+                    indegree[nbr]--;
+                 if(indegree[nbr]==0)
+                    {
+                     q.push(nbr);
+                        visited[nbr]=true;
+                    }
+                 }
+                 
+             }
+         }
+         if(ans.size()==n)
+         return ans;
+         else
+         return {};
+   } 
+   
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_map<int,list<int>> adjlist;
+        for(auto i:prerequisites)
+        {
+            int u=i[0];
+            int v=i[1];
+            adjlist[u].push_back(v);
+        }
+        vector<int> ans;
+        ans= topo(adjlist,numCourses);
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+};
