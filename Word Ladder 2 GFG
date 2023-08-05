@@ -1,0 +1,113 @@
+//{ Driver Code Starts
+#include<bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+//User function Template for C++
+
+class Solution {
+public:
+    vector<vector<string>> findSequences(string beginWord, string endWord, vector<string>& wordList) {
+        queue<vector<string>> q;
+        unordered_map<string,bool> present;
+        vector<string> used;
+        vector<vector<string>> ans;
+        q.push({beginWord});
+        used.push_back(beginWord);
+        int level=0;
+        for(int i=0;i<wordList.size();i++)
+        {
+            present[wordList[i]]=false;
+        }
+        while(!q.empty())
+        {
+            vector<string> temp=q.front();
+            q.pop();
+            if(temp.size()>level)
+            {
+                level++;
+                for(auto i:used)
+                {
+                    if(present.find(i)!=present.end()&&present[i]==false)
+                    present[i]=true;
+                }
+                used.clear();
+            }
+            string back=temp.back();
+            if(back==endWord)
+            {
+                if(ans.size()==0)
+                {
+                    ans.push_back(temp);
+                }
+                else if(ans[0].size()==temp.size())
+                {
+                    ans.push_back(temp);
+                }
+            }
+            for(int i=0;i<back.size();i++)
+            {
+                char c=back[i];
+                for(char ch='a';ch<='z';ch++)
+                {
+                    back[i]=ch;
+                    if(present.find(back)!=present.end()&&present[back]==false)
+                    {
+                        temp.push_back(back);
+                        q.push(temp);
+                        used.push_back(back);
+                        temp.pop_back();
+                    }
+                }
+                back[i]=c;
+            }
+        }
+        return ans;
+    }
+};
+
+
+//{ Driver Code Starts.
+
+bool comp(vector<string> a, vector<string> b)
+{
+    string x = "", y = "";
+    for(string i: a)
+        x += i;
+    for(string i: b)
+        y += i;
+    
+    return x<y;
+}
+
+int main(){
+	int tc;
+	cin >> tc;
+	while(tc--){
+		int n;
+		cin >> n;
+		vector<string>wordList(n);
+		for(int i = 0; i < n; i++)cin >> wordList[i];
+		string startWord, targetWord;
+		cin >> startWord >> targetWord;
+		Solution obj;
+		vector<vector<string>> ans = obj.findSequences(startWord, targetWord, wordList);
+		if(ans.size()==0)
+		    cout<<-1<<endl;
+		else
+		{
+		    sort(ans.begin(), ans.end(), comp);
+            for(int i=0; i<ans.size(); i++)
+            {
+                for(int j=0; j<ans[i].size(); j++)
+                {
+                    cout<<ans[i][j]<<" ";
+                }
+                cout<<endl;
+            }
+		}
+	}
+	return 0;
+}
+// } Driver Code Ends
