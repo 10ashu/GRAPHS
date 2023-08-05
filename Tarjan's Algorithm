@@ -1,0 +1,52 @@
+class Solution {
+public:
+
+
+   void tarjan(int src,vector<int> &tin,vector<int> &low,unordered_map<int,list<int>> &adjlist,vector<vector<int>> &ans,unordered_map<int,bool> &visited,int parent,int timer)
+   {
+       visited[src]=true;
+       tin[src]=timer;
+       low[src]=timer;
+       timer++;
+       for(auto nbr:adjlist[src])
+       {
+           if(nbr==parent)
+           continue;
+           if(!visited[nbr])
+           {
+               tarjan(nbr,tin,low,adjlist,ans,visited,src,timer);
+               low[src]=min(low[nbr],low[src]);
+                if(low[nbr]>tin[src])
+               {
+                  vector<int> temp;
+                  temp.push_back(src);
+                  temp.push_back(nbr);
+                  ans.push_back(temp);
+               }
+           }
+           else
+           {
+               low[src]=min(low[src],low[nbr]);
+           }
+          
+       }
+   }
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        unordered_map<int,list<int>> adjlist;
+        for(auto i:connections)
+        {
+            int u=i[0];
+            int v=i[1];
+            adjlist[u].push_back(v);
+            adjlist[v].push_back(u);
+        }
+        vector<int> tin(n);
+        vector<int> low(n);
+        vector<vector<int>> ans;
+        unordered_map<int,bool> visited;
+        int timer=0;
+        int parent=-1;
+        tarjan(0,tin,low,adjlist,ans,visited,parent,timer);
+        return ans;
+    }
+};
